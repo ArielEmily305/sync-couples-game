@@ -1,0 +1,641 @@
+/* ═══════════════════════════════════════════════════════════
+   SYNC BY EMILY — Color System & Design Tokens
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* ── Brand Colors ── */
+  --color-bg:      #fffaf5;
+  --color-text:    #222222;
+  --color-gold:    #cfaf4a;
+  --color-red:     #f00420;
+  --color-white:   #ffffff;
+
+  /* ── Derived ── */
+  --color-gold-light:  rgba(207, 175, 74, 0.14);
+  --color-gold-border: rgba(207, 175, 74, 0.35);
+  --color-text-muted:  rgba(34, 34, 34, 0.5);
+  --color-overlay:     rgba(255, 250, 245, 0.97);
+
+  /* ── Typography ── */
+  --font-body:    system-ui, 'Segoe UI', Arial, sans-serif;
+  --font-cursive: 'Dancing Script', cursive;
+
+  /* ── Card Dimensions — capped to phone width ── */
+  --card-w: min(17rem, min(78vw, 335px));
+  --card-h: calc(var(--card-w) * 1.42);
+  --card-radius: 1.25rem;
+
+  /* ── Buttons ── */
+  --btn-radius: 3rem;
+  --btn-h:      3.25rem;
+
+  /* ── Layout ── */
+  --pad: 1.5rem;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 8px 32px rgba(34, 34, 34, 0.10);
+  --shadow-deck: 0 4px 16px rgba(34, 34, 34, 0.08);
+
+  /* ── Animations ── */
+  --flip-dur:    0.6s;
+  --shuffle-dur: 0.65s;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Reset & Base
+   ═══════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  height: 100%;
+  background: #111; /* desktop surround — neutral dark */
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  direction: rtl;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Screen System — Phone-width container, centered on desktop
+   ═══════════════════════════════════════════════════════════ */
+.screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pad);
+  padding-top:    max(var(--pad), env(safe-area-inset-top,    var(--pad)));
+  padding-bottom: max(var(--pad), env(safe-area-inset-bottom, var(--pad)));
+  background: var(--color-bg);
+  overflow: hidden;
+  gap: 1.5rem;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.screen-overlay {
+  background: var(--color-overlay);
+  z-index: 100;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Logo
+   ═══════════════════════════════════════════════════════════ */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  line-height: 1;
+}
+
+.logo-sync {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--color-text);
+  letter-spacing: 0.18em;
+  line-height: 1;
+}
+
+.logo-byemily {
+  font-family: var(--font-cursive);
+  font-size: 1.5rem;
+  color: var(--color-gold);
+  line-height: 1.2;
+}
+
+.logo-small .logo-sync    { font-size: 2rem; }
+.logo-small .logo-byemily { font-size: 1.1rem; }
+
+/* ═══════════════════════════════════════════════════════════
+   Landing Screen — Full-cover background image
+   ═══════════════════════════════════════════════════════════ */
+#screen-landing {
+  background-image: url('משחק קלפים זוגי sync (1).png');
+  background-size: cover;
+  background-position: center center;
+  background-color: #1a0005;
+  justify-content: flex-end;
+  padding: 0;
+  padding-bottom: clamp(3.5rem, 12vh, 7rem);
+}
+
+.btn-landing {
+  min-width: 14rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  background: var(--color-red); /* always red, overrides .btn-primary gold */
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Buttons
+   ═══════════════════════════════════════════════════════════ */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 18rem;
+  height: var(--btn-h);
+  border: none;
+  border-radius: var(--btn-radius);
+  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.96);
+  opacity: 0.88;
+}
+
+/* "בוצע" — gold background, cream text */
+.btn-primary {
+  background: var(--color-gold);
+  color: var(--color-bg);
+}
+
+/* Landing button overrides to red */
+.btn-landing {
+  background: var(--color-red);
+}
+
+/* "חוב מתוק" — cream background, gold text, gold border */
+.btn-secondary {
+  background: var(--color-bg);
+  color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Setup Screen
+   ═══════════════════════════════════════════════════════════ */
+.setup-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-gold);
+  font-weight: 500;
+  margin-top: -0.5rem;
+  text-align: center;
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 18rem;
+}
+
+.setup-form input {
+  height: 3rem;
+  border: 1.5px solid var(--color-gold-border);
+  border-radius: 0.75rem;
+  padding: 0 1rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-white);
+  text-align: center;
+  direction: rtl;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.setup-form input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px var(--color-gold-light);
+}
+
+.setup-form input::placeholder {
+  color: rgba(34, 34, 34, 0.32);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Instructions Screen
+   ═══════════════════════════════════════════════════════════ */
+.instructions-card {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gold-border);
+  border-radius: var(--card-radius);
+  padding: 2rem 1.5rem;
+  max-width: 20rem;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+}
+
+.instructions-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  counter-reset: instructions;
+}
+
+.instructions-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  direction: rtl;
+  text-align: right;
+  counter-increment: instructions;
+}
+
+.instructions-list li::before {
+  content: counter(instructions);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Deck Screen
+   ═══════════════════════════════════════════════════════════ */
+.deck-container {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  cursor: pointer;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+/* Red card backs in the deck — thin black border for depth on cream bg */
+.deck-card {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  background: var(--color-red);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-deck);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stacked offset — each card peeks slightly */
+.deck-card-5 { transform: rotate(-4deg) translate(-5px,  4px); z-index: 1; }
+.deck-card-4 { transform: rotate(-2deg) translate(-3px,  2px); z-index: 2; }
+.deck-card-3 { transform: rotate( 0deg) translate( 0,    0  ); z-index: 3; }
+.deck-card-2 { transform: rotate( 2deg) translate( 3px,  2px); z-index: 4; }
+.deck-card-1 { transform: rotate( 1deg) translate( 1px,  1px); z-index: 5; }
+
+.deck-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.deck-logo .logo-sync {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-bg);
+  letter-spacing: 0.18em;
+}
+
+.deck-logo .logo-byemily {
+  font-family: var(--font-cursive);
+  font-size: 1rem;
+  color: var(--color-gold);
+}
+
+.deck-hint {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* Shuffle Animation */
+@keyframes shuffle {
+  0%   { transform: rotate( 1deg) translate( 1px,  1px); }
+  15%  { transform: rotate(-9deg) translate(-14px, -5px) scale(1.05); }
+  30%  { transform: rotate( 7deg) translate( 9px,  -7px) scale(1.03); }
+  50%  { transform: rotate(-5deg) translate(-7px,   2px) scale(1.04); }
+  70%  { transform: rotate( 4deg) translate( 5px,  -2px) scale(1.02); }
+  85%  { transform: rotate(-1deg) translate(-2px,   1px); }
+  100% { transform: rotate( 1deg) translate( 1px,  1px); }
+}
+
+.deck-container.shuffling .deck-card-1 {
+  animation: shuffle var(--shuffle-dur) ease-in-out;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Card Flip (3D)
+   ═══════════════════════════════════════════════════════════ */
+/* Card counter hidden — users don't need to see card numbers */
+.card-counter {
+  display: none;
+}
+
+.card-flip-container {
+  width: var(--card-w);
+  height: var(--card-h);
+  perspective: 1000px;
+  flex-shrink: 0;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--flip-dur) cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.card-flip-container.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Both faces: red background, thin black border, rounded, shadow */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.75rem 1.5rem;
+  background: var(--color-red);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  gap: 1rem;
+}
+
+.card-back-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+}
+
+.card-back-logo .logo-sync {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--color-bg);
+  letter-spacing: 0.18em;
+}
+
+.card-back-logo .logo-byemily {
+  font-family: var(--font-cursive);
+  font-size: 1.2rem;
+  color: var(--color-gold);
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  justify-content: center;
+}
+
+.card-front::-webkit-scrollbar { display: none; }
+
+/* Cream text on red card */
+.card-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  text-align: center;
+  color: var(--color-bg);
+  direction: rtl;
+  white-space: pre-line;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 18rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Timer Display
+   ═══════════════════════════════════════════════════════════ */
+.timer-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.4rem;
+  border-radius: 2rem;
+  background: rgba(255, 250, 245, 0.18);
+  border: 1.5px solid rgba(255, 250, 245, 0.55);
+  color: var(--color-bg);
+  flex-shrink: 0;
+}
+
+/* Debt timer (on cream overlay) uses gold */
+#screen-debt .timer-display {
+  background: var(--color-gold-light);
+  border: 1.5px solid var(--color-gold);
+  color: var(--color-gold);
+}
+
+.timer-display #timer-value,
+.timer-display #debt-timer-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timer-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.timer-display.urgent {
+  background: rgba(255, 250, 245, 0.30);
+  border-color: var(--color-bg);
+  color: var(--color-bg);
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+#screen-debt .timer-display.urgent {
+  background: rgba(240, 4, 32, 0.08);
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+@keyframes pulse {
+  from { opacity: 0.65; }
+  to   { opacity: 1; }
+}
+
+.hidden { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   Sweet Debt Screen
+   ═══════════════════════════════════════════════════════════ */
+.debt-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 21rem;
+  text-align: center;
+}
+
+.debt-title {
+  font-family: var(--font-cursive);
+  font-size: 2rem;
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.debt-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-text);
+  direction: rtl;
+  white-space: pre-line;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Junction Screen
+   ═══════════════════════════════════════════════════════════ */
+.junction-card {
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gold-border);
+  border-radius: var(--card-radius);
+  padding: 2rem 1.5rem;
+  max-width: 20rem;
+  box-shadow: var(--shadow-card);
+}
+
+.junction-text {
+  font-size: 1rem;
+  line-height: 1.85;
+  text-align: center;
+  color: var(--color-text);
+  direction: rtl;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   End Screen
+   ═══════════════════════════════════════════════════════════ */
+.end-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 21rem;
+  text-align: center;
+  width: 100%;
+}
+
+.end-message {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--color-text);
+  direction: rtl;
+  white-space: pre-line;
+}
+
+.video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 18rem;
+  aspect-ratio: 16/9;
+  background: var(--color-gold-light);
+  border: 1.5px solid var(--color-gold-border);
+  border-radius: 0.75rem;
+  color: var(--color-gold);
+  font-size: 0.9rem;
+}
+
+.video-icon {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+.end-social {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 18rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--btn-radius);
+  background: var(--color-gold-light);
+  border: 1.5px solid var(--color-gold-border);
+  color: var(--color-gold);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  direction: rtl;
+  transition: background 0.15s ease;
+}
+
+.social-link:active {
+  background: rgba(207, 175, 74, 0.25);
+}
+
+.social-icon {
+  font-size: 1.2rem;
+}
